@@ -222,7 +222,7 @@ public final class DBDesignerParser {
                 mapColumnsComments.put(columnName, columnComments);
             }
             if (isCreateTableSelected) {
-                // Trata de montar o tipo da coluna
+                // datatype name and type
                 datatypeName = this.datatypes.get(idDatatype) != null ? (String) this.datatypes.get(idDatatype) : "";
                 datatypeName = DBDesignerModel4.normalizeAttribute(datatypeName);
 
@@ -230,7 +230,21 @@ public final class DBDesignerParser {
                 datatypeParams = DBDesignerModel4.normalizeAttribute(datatypeParams);
 
                 columnDataType = datatypeName + datatypeParams;
-                
+
+
+                // Replace the types when its foreign key:
+                //   serial => int4
+                //   bigserial => int8
+
+
+
+                if (elementColumn.getAttribute("IsForeignKey").equals(DBDesignerModel4.TRUE) && datatypeName.equalsIgnoreCase("serial")) {
+                    columnDataType = "int4";
+
+                } else if (elementColumn.getAttribute("IsForeignKey").equals(DBDesignerModel4.TRUE) && datatypeName.equalsIgnoreCase("bigserial")) {
+                    columnDataType = "int8";
+                }
+
                 // Verify if datatype is updated
                 datatypeTranslation = mapDatatypesTranslation.get(columnDataType);
                 if ((datatypeTranslation != null) && (!datatypeTranslation.trim().equals(""))) {
@@ -552,12 +566,27 @@ public final class DBDesignerParser {
         Iterator iteratorColumns = XMLParser.getChildrenByTagName(elementColumns, "COLUMN");
         String primaryKeyName = "";
         Element elementColumn = null;
+        String colName = null;
+        String datatypeName = null;
+        String idDatatype = null;
         while (iteratorColumns.hasNext()) {
             elementColumn = (Element) iteratorColumns.next();
-            String colName = DBDesignerModel4.normalizeAttribute(elementColumn.getAttribute("ColName"));
+            colName = DBDesignerModel4.normalizeAttribute(elementColumn.getAttribute("ColName"));
+
             colName = colName.replaceAll(" ", "_");
 
-            if ((elementColumn.getAttribute("PrimaryKey").equals(DBDesignerModel4.TRUE)) && (elementColumn.getAttribute("AutoInc").equals(DBDesignerModel4.TRUE)) && (elementColumn.getAttribute("IsForeignKey").equals(DBDesignerModel4.FALSE))) {
+            // ignore the types serial and bigserial, because they do not need a sequence
+            // datatype name and type
+            idDatatype = elementColumn.getAttribute("idDatatype");
+            datatypeName = this.datatypes.get(idDatatype) != null ? (String) this.datatypes.get(idDatatype) : "";
+            datatypeName = DBDesignerModel4.normalizeAttribute(datatypeName);
+
+
+
+           
+            // verify the need to create a sequence
+
+            if ((elementColumn.getAttribute("PrimaryKey").equals(DBDesignerModel4.TRUE)) && (elementColumn.getAttribute("AutoInc").equals(DBDesignerModel4.TRUE)) && (elementColumn.getAttribute("IsForeignKey").equals(DBDesignerModel4.FALSE) && (!(datatypeName.equalsIgnoreCase("serial")|| datatypeName.equalsIgnoreCase("bigserial"))))) {
                 primaryKeyName = primaryKeyName + "," + colName;
             }
         }
@@ -620,7 +649,7 @@ public final class DBDesignerParser {
                         columnName = (String) this.columns.get(elementIndexColumn.getAttribute("idColumn"));
                         columnNames = columnNames + ", " + columnName;
                     }
-                    if (columnName.length()>1){
+                    if (columnName.length() > 1) {
                         sb.append(columnNames.substring(2));
                     }
                     sb.append(");\r\n\r\n");
@@ -704,6 +733,7 @@ public final class DBDesignerParser {
  *  destination is put after with small priority. 
  *  
  */
+
 class TablesPriority {
 
     ArrayList<String> tables = null;
