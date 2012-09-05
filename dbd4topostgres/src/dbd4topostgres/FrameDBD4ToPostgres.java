@@ -246,6 +246,8 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
         this.listTableSelections.addMouseListener(lst);
         this.listTableSelections.addKeyListener(lst);
         panelScriptResult = new javax.swing.JPanel();
+        panelOptionsResultScript = new javax.swing.JPanel();
+        cmdClearResult = new javax.swing.JButton();
         scrollPaneScriptResult = new RTextScrollPane();
         txtAreaScriptResult = new RSyntaxTextArea();
         ((RSyntaxTextArea) this.txtAreaScriptResult).setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_SQL);
@@ -481,14 +483,14 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
             }
         });
         panelObjectIdentification.add(chkObjectIdentification);
-        chkObjectIdentification.setBounds(10, 10, 70, 21);
+        chkObjectIdentification.setBounds(10, 10, 70, 22);
 
         buttonGroupObjectIdentification.add(radioWithOID);
         radioWithOID.setText(resourceMap.getString("radioWithOID.text")); // NOI18N
         radioWithOID.setEnabled(false);
         radioWithOID.setName("radioWithOID"); // NOI18N
         panelObjectIdentification.add(radioWithOID);
-        radioWithOID.setBounds(230, 10, 100, 21);
+        radioWithOID.setBounds(230, 10, 100, 22);
 
         buttonGroupObjectIdentification.add(radioWithoutOID);
         radioWithoutOID.setSelected(true);
@@ -496,7 +498,7 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
         radioWithoutOID.setEnabled(false);
         radioWithoutOID.setName("radioWithoutOID"); // NOI18N
         panelObjectIdentification.add(radioWithoutOID);
-        radioWithoutOID.setBounds(90, 10, 130, 21);
+        radioWithoutOID.setBounds(90, 10, 130, 22);
 
         panelExtraConfigurations.add(panelObjectIdentification);
 
@@ -512,6 +514,7 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
         lblTablesFromModel.setFont(resourceMap.getFont("lblTablesFromModel.font")); // NOI18N
         lblTablesFromModel.setForeground(resourceMap.getColor("lblTablesFromModel.foreground")); // NOI18N
         lblTablesFromModel.setText(resourceMap.getString("lblTablesFromModel.text")); // NOI18N
+        lblTablesFromModel.setToolTipText(resourceMap.getString("lblTablesFromModel.toolTipText")); // NOI18N
         lblTablesFromModel.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEtchedBorder(), javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         lblTablesFromModel.setName("lblTablesFromModel"); // NOI18N
         lblTablesFromModel.setOpaque(true);
@@ -537,6 +540,23 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
         panelScriptResult.setName("panelScriptResult"); // NOI18N
         panelScriptResult.setPreferredSize(new java.awt.Dimension(500, 300));
         panelScriptResult.setLayout(new java.awt.BorderLayout());
+
+        panelOptionsResultScript.setName("panelOptionsResultScript"); // NOI18N
+
+        cmdClearResult.setIcon(resourceMap.getIcon("cmdClearResult.icon")); // NOI18N
+        cmdClearResult.setText(resourceMap.getString("cmdClearResult.text")); // NOI18N
+        cmdClearResult.setToolTipText(resourceMap.getString("cmdClearResult.toolTipText")); // NOI18N
+        cmdClearResult.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        cmdClearResult.setName("cmdClearResult"); // NOI18N
+        cmdClearResult.setPreferredSize(new java.awt.Dimension(120, 36));
+        cmdClearResult.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdClearResultActionPerformed(evt);
+            }
+        });
+        panelOptionsResultScript.add(cmdClearResult);
+
+        panelScriptResult.add(panelOptionsResultScript, java.awt.BorderLayout.SOUTH);
 
         scrollPaneScriptResult.setMinimumSize(scrollPaneScriptResult.getPreferredSize());
         scrollPaneScriptResult.setName("scrollPaneScriptResult"); // NOI18N
@@ -1470,6 +1490,10 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
         this.preferences.put("LAST_CHARSET", "Linux");//NOI18N
     }//GEN-LAST:event_radioLinuxUTF8ActionPerformed
 
+private void cmdClearResultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdClearResultActionPerformed
+    this.txtAreaScriptResult.setText("");
+}//GEN-LAST:event_cmdClearResultActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1501,6 +1525,7 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
     private javax.swing.JCheckBox chkDropTable;
     private javax.swing.JCheckBox chkObjectIdentification;
     private javax.swing.JCheckBox chkStandardInserts;
+    private javax.swing.JButton cmdClearResult;
     private javax.swing.JMenuItem cmdExit;
     private javax.swing.JButton cmdGenerateScript;
     private javax.swing.JMenuItem cmdOpenModel;
@@ -1519,6 +1544,7 @@ public class FrameDBD4ToPostgres extends javax.swing.JFrame {
     private javax.swing.JPanel panelFieldsTranslate;
     private javax.swing.JPanel panelMain;
     private javax.swing.JPanel panelObjectIdentification;
+    private javax.swing.JPanel panelOptionsResultScript;
     private javax.swing.JPanel panelOwner;
     private javax.swing.JPanel panelScriptResult;
     private javax.swing.JPanel panelSelectOptions;
